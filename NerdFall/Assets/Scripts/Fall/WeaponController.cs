@@ -26,7 +26,7 @@ public class WeaponController : MonoBehaviour
         {
             this.loadedBullet = (GameObject)Instantiate(bulletPrefab, this.transform.position, this.transform.rotation);
             this.loadedBullet.transform.parent = this.transform;
-            this.loadedBullet.transform.localPosition = new Vector3(this.loadedBullet.transform.localPosition.x + 1f, this.loadedBullet.transform.localPosition.y);
+            this.loadedBullet.transform.localPosition = new Vector3(this.loadedBullet.transform.localPosition.x + 1f, this.loadedBullet.transform.localPosition.y, 0f);
         }
         else
         {
@@ -38,7 +38,7 @@ public class WeaponController : MonoBehaviour
     {
         Rigidbody2D rbBullet = this.loadedBullet.GetComponent<Rigidbody2D>();
         rbBullet.isKinematic = false;
-        rbBullet.AddRelativeForce(new Vector2(10f, 0), ForceMode2D.Impulse);
+        rbBullet.AddRelativeForce(new Vector2(20f, 0), ForceMode2D.Impulse);
         this.loadedBullet.transform.parent = null;
         Destroy(this.loadedBullet, 3);
 
