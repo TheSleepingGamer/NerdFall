@@ -2,6 +2,7 @@
 
 public class WeaponController : MonoBehaviour
 {
+    public GameObject cannonHead;
     public GameObject bulletPrefab;
 
     private GameObject loadedBullet;
@@ -10,9 +11,9 @@ public class WeaponController : MonoBehaviour
     {
         Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
         Vector3 lookPos = Camera.main.ScreenToWorldPoint(mousePos);
-        lookPos = lookPos - this.transform.position;
+        lookPos = lookPos - this.cannonHead.transform.position;
         float angle = Mathf.Atan2(lookPos.y, lookPos.x) * Mathf.Rad2Deg;
-        this.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        this.cannonHead.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -24,8 +25,8 @@ public class WeaponController : MonoBehaviour
     {
         if (this.loadedBullet == null)
         {
-            this.loadedBullet = (GameObject)Instantiate(bulletPrefab, this.transform.position, this.transform.rotation);
-            this.loadedBullet.transform.parent = this.transform;
+            this.loadedBullet = (GameObject)Instantiate(this.bulletPrefab, this.cannonHead.transform.position, this.cannonHead.transform.rotation);
+            this.loadedBullet.transform.parent = this.cannonHead.transform;
             this.loadedBullet.transform.localPosition = new Vector3(this.loadedBullet.transform.localPosition.x + 1.2f, this.loadedBullet.transform.localPosition.y, 0f);
         }
         else
