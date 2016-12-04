@@ -26,7 +26,7 @@ public class WeaponController : MonoBehaviour
         {
             this.loadedBullet = (GameObject)Instantiate(bulletPrefab, this.transform.position, this.transform.rotation);
             this.loadedBullet.transform.parent = this.transform;
-            this.loadedBullet.transform.localPosition = new Vector3(this.loadedBullet.transform.localPosition.x + 1f, this.loadedBullet.transform.localPosition.y, 0f);
+            this.loadedBullet.transform.localPosition = new Vector3(this.loadedBullet.transform.localPosition.x + 1.2f, this.loadedBullet.transform.localPosition.y, 0f);
         }
         else
         {
