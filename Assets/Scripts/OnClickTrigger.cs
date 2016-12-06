@@ -15,18 +15,21 @@ public class OnClickTrigger : MonoBehaviour, IPointerClickHandler
     public void OnScrollClick()
     {
         Debug.Log("Click detected!");
-        SceneManager.LoadScene("TaskInfo");
+       // SceneManager.LoadScene("TaskInfo");
+        GameStateManager.TransitionToScene(GameScene.TaskInfo);
     }
 
     public void OnBackButtonClick()
     {
         Debug.Log("Click detected!");
-        SceneManager.LoadScene("University");
+        //SceneManager.LoadScene("University");
+        GameStateManager.TransitionToScene(GameScene.University);
     }
 
     public void OnStartButtonClick()
     {
         Debug.Log("Click detected!");
-        SceneManager.LoadScene("Fall");
+       // SceneManager.LoadScene("Fall");
+        GameStateManager.TransitionToScene(GameScene.Fall);
     }
 }
