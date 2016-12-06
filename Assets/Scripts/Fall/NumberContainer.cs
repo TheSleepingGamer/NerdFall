@@ -26,4 +26,14 @@ public class NumberContainer : MonoBehaviour
     {
         return int.Parse(this.text.text);
     }
+
+    public void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "WeaponType_1")
+        {
+            Debug.Log("hit!");
+            Destroy(this.gameObject);
+            Destroy(col.gameObject);
+        }
+    }
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 
 // invokerepeating
@@ -6,8 +7,8 @@
 
 public class BubbleSpawnController : MonoBehaviour
 {
-    public float min = -10;
-    public float max = 10;
+   // public int min = -1;
+   // public int max = 1;
 
     public float timeBetweenSpawns = 4f;
 
@@ -15,10 +16,19 @@ public class BubbleSpawnController : MonoBehaviour
     public GameObject bubblePrefab;
 
     private float timer = 0f;
+    private List<float> spawnPositions;
 
     public void Start()
     {
         this.timeBetweenSpawns = Time.time + timeBetweenSpawns;
+
+        this.spawnPositions = new List<float>()
+        {
+            -6,
+            -2,
+            2,
+            6
+        };
     }
 
     public void Update()
@@ -34,14 +44,14 @@ public class BubbleSpawnController : MonoBehaviour
 
     private void SpawnNewBubble()
     {
-        GameObject bubble = (GameObject)Instantiate(this.bubblePrefab, this.spawnerObject.transform.position, this.spawnerObject.transform.rotation);
-        bubble.transform.parent = this.spawnerObject.transform;
-
-        float randPosition = Random.Range(this.min, this.max);
-        bubble.transform.localPosition = new Vector3(randPosition, 0);
-
-        NumberContainer nmContainer = bubble.GetComponent<NumberContainer>();
-        int randNumber = Random.Range(0, 65);
-        nmContainer.SetNumber(randNumber);
+        for (int i = 0; i < this.spawnPositions.Count; i++)
+        {
+            GameObject bubble = (GameObject)Instantiate(this.bubblePrefab, this.spawnerObject.transform.position, this.spawnerObject.transform.rotation);
+            bubble.transform.parent = this.spawnerObject.transform;
+            bubble.transform.localPosition = new Vector3(this.spawnPositions[i], 0);
+            NumberContainer nmContainer = bubble.GetComponent<NumberContainer>();
+            int randNumber = Random.Range(0, 65);
+            nmContainer.SetNumber(randNumber);
+        }
     }
 }

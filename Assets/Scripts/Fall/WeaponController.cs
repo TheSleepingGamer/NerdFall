@@ -4,6 +4,7 @@ public class WeaponController : MonoBehaviour
 {
     public GameObject cannonHead;
     public GameObject bulletPrefab;
+    public float bulletSpeed;
 
     private GameObject loadedBullet;
 
@@ -39,7 +40,7 @@ public class WeaponController : MonoBehaviour
     {
         Rigidbody2D rbBullet = this.loadedBullet.GetComponent<Rigidbody2D>();
         rbBullet.isKinematic = false;
-        rbBullet.AddRelativeForce(new Vector2(20f, 0), ForceMode2D.Impulse);
+        rbBullet.AddRelativeForce(new Vector2(bulletSpeed, 0), ForceMode2D.Impulse);
         this.loadedBullet.transform.parent = null;
         Destroy(this.loadedBullet, 3);
 
