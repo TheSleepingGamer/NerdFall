@@ -7,6 +7,13 @@ using UnityEngine.UI;
 [RequireComponent(typeof(BoxCollider2D))]
 public class OnClickTrigger : MonoBehaviour, IPointerClickHandler
 {
+    public  GameObject taskInfo;
+
+    public void Start()
+    {
+        taskInfo.SetActive(false);
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
         Debug.Log("Click detected!");
@@ -14,22 +21,18 @@ public class OnClickTrigger : MonoBehaviour, IPointerClickHandler
 
     public void OnScrollClick()
     {
-        Debug.Log("Click detected!");
-       // SceneManager.LoadScene("TaskInfo");
-        GameStateManager.TransitionToScene(GameScene.TaskInfo);
+        taskInfo.SetActive(true);
     }
 
     public void OnBackButtonClick()
     {
-        Debug.Log("Click detected!");
-        //SceneManager.LoadScene("University");
         GameStateManager.TransitionToScene(GameScene.University);
+        taskInfo.SetActive(false);
     }
 
     public void OnStartButtonClick()
     {
-        Debug.Log("Click detected!");
-       // SceneManager.LoadScene("Fall");
         GameStateManager.TransitionToScene(GameScene.Fall);
+        taskInfo.SetActive(false);
     }
 }
