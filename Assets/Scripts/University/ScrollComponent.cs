@@ -1,15 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class ScrollComponent : MonoBehaviour, IPointerClickHandler
 {
     public string name;
 
     public string description;
-
-    public int inteligencePoints;
 
     public GameObject taskInfo;
 
@@ -34,12 +30,20 @@ public class ScrollComponent : MonoBehaviour, IPointerClickHandler
 	            this.isUnlocked = true;
                 break;
             case "subtraction":
-                this.description = "In this level you'll master your skill to solve simple arithmethic subtraction.";
-                spriteRenderer.sprite = unlockedSprite;
-                this.isUnlocked = true;
+                if (Player.intelligenceAmount > 200)
+                {
+                    this.description = "In this level you'll master your skill to solve simple arithmethic subtraction.";
+                    spriteRenderer.sprite = unlockedSprite;
+                    this.isUnlocked = true;
+                }
+                else
+                {
+                    spriteRenderer.sprite = lockedSprite;
+                }
+               
                 break;
             case "multiplication":
-                if (inteligencePoints > 50)
+                if (Player.intelligenceAmount > 250)
                 {
                     spriteRenderer.sprite = unlockedSprite;
                     this.isUnlocked = true;
@@ -51,7 +55,7 @@ public class ScrollComponent : MonoBehaviour, IPointerClickHandler
 
 	            break;
             case "division":
-                if (inteligencePoints >= 100)
+                if (Player.intelligenceAmount > 350)
                 {
                     spriteRenderer.sprite = unlockedSprite;
                     this.isUnlocked = true;
@@ -63,7 +67,7 @@ public class ScrollComponent : MonoBehaviour, IPointerClickHandler
 
 	            break;
             case "fibonacci":
-                if (inteligencePoints >= 150)
+                if (Player.intelligenceAmount > 450)
                 {
                     spriteRenderer.sprite = unlockedSprite;
                     this.isUnlocked = true;
@@ -75,7 +79,7 @@ public class ScrollComponent : MonoBehaviour, IPointerClickHandler
 
 	            break;
             case "trigonometry":
-                if (inteligencePoints >= 200)
+                if (Player.intelligenceAmount >= 600)
                 {
                     spriteRenderer.sprite = unlockedSprite;
                     this.isUnlocked = true;
@@ -84,7 +88,6 @@ public class ScrollComponent : MonoBehaviour, IPointerClickHandler
                 {
                     spriteRenderer.sprite = lockedSprite;
                 }
-                this.description = "TODO";
                 break;
         }
 	}
