@@ -22,6 +22,7 @@ public class BubbleComponent : MonoBehaviour
             {
                 Debug.Log("HIT!!");
 
+                Destroy(col.gameObject);
                 this.bubbleHitAction.Invoke(int.Parse(this.text.text));
             }
         }
