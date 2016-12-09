@@ -55,8 +55,8 @@ public class FallMain : MonoBehaviour
         this.currentlySelectedProblem = Problem.Addition;
         this.currentLevel = 1;
 
-        /*// Mocking player data
-        Player.intelligenceAmount = 150;
+        // Mocking player data
+       /* Player.intelligenceAmount = 150;
         Player.playerProgressData = new Dictionary<Problem, ProblemData>();
         Player.playerProgressData.Add(Problem.Addition, ProblemManager.GenerateNewProblem(Problem.Addition));
         Player.playerProgressData.Add(Problem.Subtraction, ProblemManager.GenerateNewProblem(Problem.Subtraction));
@@ -200,7 +200,7 @@ public class FallMain : MonoBehaviour
 
         this.spawnCount = 1;
         this.SpawnNewQuestion(ProblemManager.GetNewQuestion(this.currentlySelectedProblem, this.currentLevel, this.spawnCount));
-
+        
     }
 
     public void OnClickButtonChangeLevel()

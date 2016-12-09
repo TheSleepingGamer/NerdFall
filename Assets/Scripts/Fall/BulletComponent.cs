@@ -14,14 +14,10 @@ public class BulletComponent : MonoBehaviour
         this.rigidBody = this.GetComponent<Rigidbody2D>();
     }
 
-    public void OnDestroy()
-    {
-        this.InformBulletIsNotWorkingAnymore();
-    }
-
     public void OnBecameInvisible()
     {
         Destroy(this.gameObject);
+        this.InformBulletIsNotWorkingAnymore();
     }
 
     public void Pause()

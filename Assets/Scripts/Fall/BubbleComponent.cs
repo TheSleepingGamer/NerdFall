@@ -4,6 +4,7 @@ using System.Collections;
 
 public class BubbleComponent : MonoBehaviour
 {
+    public FallMain main;
     public TextMesh text;
 
     [HideInInspector]
@@ -21,9 +22,13 @@ public class BubbleComponent : MonoBehaviour
             if (this.bubbleHitAction != null)
             {
                 Debug.Log("HIT!!");
+
+                //TODO: remove the "main" and see why this is causing the game to stop working
+                //col.gameObject.GetComponent<BulletComponent>().InformBulletIsNotWorkingAnymore();
+
+                this.main.OnBulletDeactivation();
                 Destroy(col.gameObject);
 
-                col.gameObject.GetComponent<BulletComponent>().InformBulletIsNotWorkingAnymore();
 
                 this.bubbleHitAction.Invoke(int.Parse(this.text.text));
             }
