@@ -7,6 +7,5 @@ public enum GameScene
     Home,
     University,
     Fall,
-
-    TaskInfo
+    Map
 }

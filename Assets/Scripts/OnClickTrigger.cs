@@ -35,4 +35,24 @@ public class OnClickTrigger : MonoBehaviour, IPointerClickHandler
         GameStateManager.TransitionToScene(GameScene.Fall);
         taskInfo.SetActive(false);
     }
+
+    public void OnUniversitySpriteClick()
+    {
+        GameStateManager.TransitionToScene(GameScene.University);
+    }
+
+    public void OnHomeSpriteClick()
+    {
+        GameStateManager.TransitionToScene(GameScene.Home);
+    }
+
+    public void OnMapButtonClick()
+    {
+        GameStateManager.TransitionToScene(GameScene.Map);
+    }
+
+    public void OnExitClick()
+    {
+        Application.Quit();
+    }
 }
