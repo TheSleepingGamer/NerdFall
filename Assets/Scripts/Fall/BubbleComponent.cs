@@ -21,8 +21,10 @@ public class BubbleComponent : MonoBehaviour
             if (this.bubbleHitAction != null)
             {
                 Debug.Log("HIT!!");
-
                 Destroy(col.gameObject);
+
+                col.gameObject.GetComponent<BulletComponent>().InformBulletIsNotWorkingAnymore();
+
                 this.bubbleHitAction.Invoke(int.Parse(this.text.text));
             }
         }

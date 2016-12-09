@@ -11,8 +11,12 @@ public class QuestionComponent : MonoBehaviour
     public float fallSpeed;
     public int correctAnswer;
 
+    private bool isObjectPaused;
+
     public void Start()
     {
+        this.isObjectPaused = false;
+
         for (int i = 0; i < this.bubbles.Length; i++)
         {
             bubbles[i].AttachAHitListener(this.BubbleHitListener);
@@ -21,12 +25,16 @@ public class QuestionComponent : MonoBehaviour
 
     public void Update()
     {
-        this.transform.Translate(Vector3.down * fallSpeed * Time.deltaTime);
-
-        // TODO: Destroy object based on collider with floor
-        if (this.transform.position.y < -16)
+        if (!this.isObjectPaused)
         {
-            Destroy(this.gameObject);
+            this.transform.Translate(Vector3.down * fallSpeed * Time.deltaTime);
+
+            // TODO: Destroy object based on collider with floor
+            if (this.transform.position.y < -1)
+            {
+                //Destroy(this.gameObject);
+                this.BubbleHitListener(-1);
+            }
         }
     }
 
@@ -51,5 +59,15 @@ public class QuestionComponent : MonoBehaviour
         {
             this.bubbles[i].SetNumber(data.givenNumbers[i]);
         }
+    }
+
+    public void Pause()
+    {
+        this.isObjectPaused = true;
+    }
+
+    public void Resume()
+    {
+        this.isObjectPaused = false;
     }
 }

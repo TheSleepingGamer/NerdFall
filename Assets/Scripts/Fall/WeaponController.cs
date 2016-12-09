@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
@@ -6,23 +7,28 @@ public class WeaponController : MonoBehaviour
     public GameObject bulletPrefab;
     public float bulletSpeed;
 
-    private GameObject loadedBullet;
+    public GameObject loadedBullet;
+
+    private bool isObjectPaused;
 
     void Update()
     {
-        Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
-        Vector3 lookPos = Camera.main.ScreenToWorldPoint(mousePos);
-        lookPos = lookPos - this.cannonHead.transform.position;
-        float angle = Mathf.Atan2(lookPos.y, lookPos.x) * Mathf.Rad2Deg;
-        this.cannonHead.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-
-        if (Input.GetMouseButtonDown(0))
+        if (!this.isObjectPaused)
         {
-            this.LoadNewBullet();
+            Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
+            Vector3 lookPos = Camera.main.ScreenToWorldPoint(mousePos);
+            lookPos = lookPos - this.cannonHead.transform.position;
+            float angle = Mathf.Atan2(lookPos.y, lookPos.x) * Mathf.Rad2Deg;
+            this.cannonHead.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+            if (Input.GetMouseButtonDown(0) && this.loadedBullet != null)
+            {
+                this.FireBullet();
+            }
         }
     }
 
-    public void LoadNewBullet()
+    public GameObject LoadNewBullet()
     {
         if (this.loadedBullet == null)
         {
@@ -30,10 +36,8 @@ public class WeaponController : MonoBehaviour
             this.loadedBullet.transform.parent = this.cannonHead.transform;
             this.loadedBullet.transform.localPosition = new Vector3(this.loadedBullet.transform.localPosition.x + 1.2f, this.loadedBullet.transform.localPosition.y, 0f);
         }
-        else
-        {
-            this.FireBullet();
-        }
+
+        return this.loadedBullet;
     }
 
     public void FireBullet()
@@ -42,9 +46,18 @@ public class WeaponController : MonoBehaviour
         rbBullet.isKinematic = false;
         rbBullet.AddRelativeForce(new Vector2(bulletSpeed, 0), ForceMode2D.Impulse);
         this.loadedBullet.transform.parent = null;
-        Destroy(this.loadedBullet, 3);
+        //Destroy(this.loadedBullet, 3);
 
         this.loadedBullet = null;
     }
 
+    public void Pause()
+    {
+        this.isObjectPaused = true;
+    }
+
+    public void Resume()
+    {
+        this.isObjectPaused = false;
+    }
 }
