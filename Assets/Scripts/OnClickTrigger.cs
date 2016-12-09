@@ -22,6 +22,11 @@ public class OnClickTrigger : MonoBehaviour, IPointerClickHandler
         GameStateManager.TransitionToScene(GameScene.Home);
     }
 
+    public void OnFallSpriteClick()
+    {
+        GameStateManager.TransitionToScene(GameScene.Fall);
+    }
+
     public void OnMapButtonClick()
     {
         GameStateManager.TransitionToScene(GameScene.Map);
