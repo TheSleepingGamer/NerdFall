@@ -100,7 +100,32 @@ public static class ProblemManager
 
     private static QuestionData GetNewSubtractionQuestion(int level, int spawnNumber)
     {
-        throw new NotImplementedException();
+        QuestionData newQData = new QuestionData();
+
+        int a = level + 10;
+        int b = UnityEngine.Random.Range(0, a);
+        newQData.question = a.ToString() + " - " + b.ToString();
+
+        int correctAnswer = a - b;
+        newQData.correctAnswer = correctAnswer;
+
+        HashSet<int> differentNumbersCollection = new HashSet<int>();
+        differentNumbersCollection.Add(correctAnswer);
+
+        while (differentNumbersCollection.Count < 4)
+        {
+            int newIncorrectAnswer = UnityEngine.Random.Range(0, a);
+
+            if (newIncorrectAnswer != correctAnswer && !differentNumbersCollection.Contains(newIncorrectAnswer))
+            {
+                differentNumbersCollection.Add(newIncorrectAnswer);
+            }
+        }
+
+        newQData.givenNumbers = differentNumbersCollection.ToList();
+        Shuffle(newQData.givenNumbers);
+
+        return newQData;
     }
 
     private static void Shuffle(List<int> list)
