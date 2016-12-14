@@ -9,6 +9,8 @@ public class ScrollComponent : MonoBehaviour, IPointerClickHandler
 
     public GameObject taskInfo;
 
+    public GameObject mapButton;
+
     public Sprite lockedSprite;
 
     public Sprite unlockedSprite;
@@ -16,18 +18,19 @@ public class ScrollComponent : MonoBehaviour, IPointerClickHandler
     private SpriteRenderer spriteRenderer;
 
     private bool isUnlocked;
-
-    // Use this for initialization
-    void Start () {
+    
+    void Start()
+    {
         taskInfo.SetActive(false);
-        spriteRenderer  = GetComponent<SpriteRenderer>();
+        mapButton.SetActive(true);
+        spriteRenderer = GetComponent<SpriteRenderer>();
         this.isUnlocked = false;
         switch (name)
-	    {
+        {
             case "addition":
-	            this.description = "In this level you'll master your skill to solve simple arithmethic addition.";
-	            spriteRenderer.sprite = unlockedSprite;
-	            this.isUnlocked = true;
+                this.description = "In this level you'll master your skill to solve simple arithmethic addition.";
+                spriteRenderer.sprite = unlockedSprite;
+                this.isUnlocked = true;
                 break;
             case "subtraction":
                 if (Player.intelligenceAmount > 200)
@@ -40,7 +43,7 @@ public class ScrollComponent : MonoBehaviour, IPointerClickHandler
                 {
                     spriteRenderer.sprite = lockedSprite;
                 }
-               
+
                 break;
             case "multiplication":
                 if (Player.intelligenceAmount > 250)
@@ -53,7 +56,7 @@ public class ScrollComponent : MonoBehaviour, IPointerClickHandler
                     spriteRenderer.sprite = lockedSprite;
                 }
 
-	            break;
+                break;
             case "division":
                 if (Player.intelligenceAmount > 350)
                 {
@@ -65,7 +68,7 @@ public class ScrollComponent : MonoBehaviour, IPointerClickHandler
                     spriteRenderer.sprite = lockedSprite;
                 }
 
-	            break;
+                break;
             case "fibonacci":
                 if (Player.intelligenceAmount > 450)
                 {
@@ -77,7 +80,7 @@ public class ScrollComponent : MonoBehaviour, IPointerClickHandler
                     spriteRenderer.sprite = lockedSprite;
                 }
 
-	            break;
+                break;
             case "trigonometry":
                 if (Player.intelligenceAmount >= 600)
                 {
@@ -90,7 +93,7 @@ public class ScrollComponent : MonoBehaviour, IPointerClickHandler
                 }
                 break;
         }
-	}
+    }
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -98,5 +101,7 @@ public class ScrollComponent : MonoBehaviour, IPointerClickHandler
         {
             taskInfo.SetActive(true);
         }
+
+       // mapButton.SetActive(true);
     }
 }
