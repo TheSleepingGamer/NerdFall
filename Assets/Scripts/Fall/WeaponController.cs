@@ -40,6 +40,19 @@ public class WeaponController : MonoBehaviour
         return this.loadedBullet;
     }
 
+    public void LoadGivenBullet(GameObject bullet)
+    {
+        if (bullet != null)
+        {
+            bullet.transform.parent = this.cannonHead.transform;
+            bullet.transform.position = this.cannonHead.transform.position;
+
+            bullet.transform.localPosition = new Vector3(bullet.transform.localPosition.x + 1.8f, bullet.transform.localPosition.y, 0f);
+            bullet.transform.rotation = this.cannonHead.transform.rotation;
+            this.loadedBullet = bullet;
+        }
+    }
+
     public void FireBullet()
     {
         Rigidbody2D rbBullet = this.loadedBullet.GetComponent<Rigidbody2D>();

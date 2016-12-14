@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -9,9 +10,12 @@ public class QuestionComponent : MonoBehaviour
     public BubbleComponent[] bubbles;
 
     public float fallSpeed;
-    public int correctAnswer;
+    private int correctAnswer;
 
     private bool isObjectPaused;
+
+    private Action incorrectBubbleHit = null;
+    private Action correctBubbleHit = null;
 
     public void Start()
     {
@@ -19,7 +23,7 @@ public class QuestionComponent : MonoBehaviour
 
         for (int i = 0; i < this.bubbles.Length; i++)
         {
-            bubbles[i].AttachAHitListener(this.BubbleHitListener);
+            this.bubbles[i].AttachAHitListener(this.BubbleHitListener);
         }
     }
 
@@ -27,13 +31,12 @@ public class QuestionComponent : MonoBehaviour
     {
         if (!this.isObjectPaused)
         {
-            this.transform.Translate(Vector3.down * fallSpeed * Time.deltaTime);
+            this.transform.Translate(Vector3.down * this.fallSpeed * Time.deltaTime);
 
             // TODO: Destroy object based on collider with floor
             if (this.transform.position.y < -1)
             {
-                //Destroy(this.gameObject);
-                this.BubbleHitListener(-1);
+                this.incorrectBubbleHit.Invoke();
             }
         }
     }
@@ -42,11 +45,11 @@ public class QuestionComponent : MonoBehaviour
     {
         if (numberHit == this.correctAnswer)
         {
-            this.targetScript.OnCorrectNumberHit(this);
+            this.correctBubbleHit.Invoke();
         }
         else
         {
-            this.targetScript.OnIncorrectNumberHit(numberHit);
+            this.incorrectBubbleHit.Invoke();
         }
     }
 
@@ -69,5 +72,15 @@ public class QuestionComponent : MonoBehaviour
     public void Resume()
     {
         this.isObjectPaused = false;
+    }
+
+    public void AddListenerToIncorrectHit(Action listener)
+    {
+        this.incorrectBubbleHit += listener;
+    }
+
+    public void AddListenerToCorrectHit(Action listener)
+    {
+        this.correctBubbleHit += listener;
     }
 }

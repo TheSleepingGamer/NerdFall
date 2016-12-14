@@ -16,7 +16,6 @@ public class BulletComponent : MonoBehaviour
 
     public void OnBecameInvisible()
     {
-        Destroy(this.gameObject);
         this.InformBulletIsNotWorkingAnymore();
     }
 
@@ -36,8 +35,9 @@ public class BulletComponent : MonoBehaviour
 
     public void InformBulletIsNotWorkingAnymore()
     {
-        if (this.onBulletNoWorkiAnyMore != null)
+        if (this.onBulletNoWorkiAnyMore != null && this.rigidBody.isKinematic == false)
         {
+            this.rigidBody.isKinematic = true;
             this.onBulletNoWorkiAnyMore.Invoke();
         }
     }
@@ -45,10 +45,5 @@ public class BulletComponent : MonoBehaviour
     public void AddListenerToBullet(Action listener)
     {
         this.onBulletNoWorkiAnyMore += listener;
-    }
-
-    public void DeactivateCollider()
-    {
-        this.GetComponent<BoxCollider2D>().enabled = false;
     }
 }

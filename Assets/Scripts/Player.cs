@@ -6,4 +6,14 @@ public static class Player
 {
     public static int intelligenceAmount;
     public static Dictionary<Problem, ProblemData> playerProgressData;
+
+    public static void SavePlayerData()
+    {
+        
+    }
+
+    public static void LoadPlayerData()
+    {
+
+    }
 }

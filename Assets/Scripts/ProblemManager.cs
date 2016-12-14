@@ -4,6 +4,8 @@ using System.Linq;
 
 public static class ProblemManager
 {
+    public static int AmountOfQuestionsPerLevel = 50;
+
     public static ProblemData GenerateNewProblem(Problem wanterProblem)
     {
         switch (wanterProblem)
@@ -21,13 +23,13 @@ public static class ProblemManager
     {
         ProblemData newData = new ProblemData(Problem.Addition);
         newData.levels.Add(1, true);
-        for (int i = 2; i <= 20; i++)
+        for (int i = 2; i <= 50; i++)
         {
             newData.levels.Add(i, false);
         }
 
-        newData.levelsSpawnCount.Add(1, 1);
-        for (int i = 2; i <= 20; i++)
+        newData.levelsSpawnCount.Add(1, 15);
+        for (int i = 2; i <= 50; i++)
         {
             newData.levelsSpawnCount.Add(i, 15);
         }
@@ -39,13 +41,13 @@ public static class ProblemManager
     {
         ProblemData newData = new ProblemData(Problem.Addition);
         newData.levels.Add(1, true);
-        for (int i = 2; i <= 20; i++)
+        for (int i = 2; i <= 50; i++)
         {
             newData.levels.Add(i, false);
         }
 
-        newData.levelsSpawnCount.Add(1, 1);
-        for (int i = 2; i <= 20; i++)
+        newData.levelsSpawnCount.Add(1, 15);
+        for (int i = 2; i <= 50; i++)
         {
             newData.levelsSpawnCount.Add(i, 15);
         }
@@ -72,7 +74,7 @@ public static class ProblemManager
 
         int a = level;
         int b = UnityEngine.Random.Range(0, level + 10 + spawnNumber);
-        newQData.question = a.ToString() +  " + " + b.ToString();
+        newQData.question = a.ToString() + " + " + b.ToString();
 
         int correctAnswer = a + b;
         newQData.correctAnswer = correctAnswer;

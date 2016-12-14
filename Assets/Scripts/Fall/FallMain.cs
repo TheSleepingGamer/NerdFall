@@ -14,6 +14,7 @@ public class FallMain : MonoBehaviour
     public Text problemText;
     public Text levelText;
     public Text intAmountText;
+    public Text spawnCountText;
 
     public Text messageHolderText;
     public Text startGameButtonText;
@@ -36,43 +37,39 @@ public class FallMain : MonoBehaviour
     public GameObject spawnPosition;
     public GameObject questionObjectPrefab;
 
-    private bool isGameRunning;
+    private bool isAGameRunning;
 
     private Problem currentlySelectedProblem;
     private int currentLevel;
+    private int thisLevelSpawnCountGoal;
     private int spawnCount;
 
     private QuestionComponent currentlyActiveQuestObject;
-    private BulletComponent currentlyFiredWeapon;
+    private BulletComponent currentlyUsedBullet;
 
     public void Start()
     {
-        this.currentlyFiredWeapon = this.weaponController.LoadNewBullet().GetComponent<BulletComponent>();
-        this.currentlyFiredWeapon.AddListenerToBullet(OnBulletDeactivation);
-
-        this.isGameRunning = false;
+        this.isAGameRunning = false;
 
         this.currentlySelectedProblem = Problem.Addition;
         this.currentLevel = 1;
 
         // Mocking player data
-       /* Player.intelligenceAmount = 150;
+        Player.intelligenceAmount = 150;
         Player.playerProgressData = new Dictionary<Problem, ProblemData>();
         Player.playerProgressData.Add(Problem.Addition, ProblemManager.GenerateNewProblem(Problem.Addition));
         Player.playerProgressData.Add(Problem.Subtraction, ProblemManager.GenerateNewProblem(Problem.Subtraction));
         for (int i = 2; i < 10; i++)
         {
             Player.playerProgressData[Problem.Subtraction].levels[i] = true;
-        }*/
+        }
         // -------------
 
         this.UpdateInfoPanel();
         this.UpdatePlayerResources(0);
         this.GenerateProblemsInProblemPanel();
 
-        this.spawnCount = 1;
-        this.SpawnNewQuestion(ProblemManager.GetNewQuestion(this.currentlySelectedProblem, this.currentLevel, this.spawnCount));
-
+        this.OnClickButtonMenu();
     }
 
     private void GenerateProblemsInProblemPanel()
@@ -85,7 +82,7 @@ public class FallMain : MonoBehaviour
         foreach (var problem in Player.playerProgressData)
         {
             GameObject newProblemButton = (GameObject)Instantiate(this.problemButtonPrefab, Vector3.zero, this.spawnPosition.transform.rotation);
-            newProblemButton.transform.parent = this.problemButtonContainer.transform;
+            newProblemButton.transform.SetParent(this.problemButtonContainer.transform);
 
             ProblemButtonComponent newProblemButtonComponent = newProblemButton.GetComponent<ProblemButtonComponent>();
             newProblemButtonComponent.SetProblem(problem.Key);
@@ -104,7 +101,7 @@ public class FallMain : MonoBehaviour
             if (level.Value)
             {
                 GameObject newLevelButton = (GameObject)Instantiate(this.levelButtonPrefab, Vector3.zero, new Quaternion(0, 0, 0, 0));
-                newLevelButton.transform.parent = this.levelButtonContainer.transform;
+                newLevelButton.transform.SetParent(this.levelButtonContainer.transform);
 
                 LevelButtonComponent newProblemButtonComponent = newLevelButton.GetComponent<LevelButtonComponent>();
                 newProblemButtonComponent.text.text = level.Key.ToString();
@@ -113,29 +110,44 @@ public class FallMain : MonoBehaviour
         }
     }
 
-    public void OnCorrectNumberHit(QuestionComponent questionObject)
+    public void OnCorrectNumberHit()
     {
-        this.messageHolderText.text = "Correct -> " + questionObject.correctAnswer;
+        this.messageHolderText.text = "CORRECT!";
 
+        Destroy(this.currentlyActiveQuestObject.gameObject);
         this.currentlyActiveQuestObject = null;
-       // Destroy(questionObject.gameObject);
-        Destroy(questionObject.gameObject);
 
         this.UpdatePlayerResources(1);
 
         this.spawnCount++;
+        if (this.spawnCount > this.thisLevelSpawnCountGoal)
+        {
+            this.currentLevel++;
+
+            if (!Player.playerProgressData[this.currentlySelectedProblem].levels.ContainsKey(this.currentLevel))
+            {
+                this.currentLevel--;
+            }
+            else
+            {
+                this.levelText.text = this.currentLevel.ToString();
+                Player.playerProgressData[this.currentlySelectedProblem].levels[this.currentLevel] = true;
+                Player.SavePlayerData();
+            }
+
+            this.spawnCount = 1;
+        }
+        this.UpdateSpawnCount();
+
         this.SpawnNewQuestion(ProblemManager.GetNewQuestion(this.currentlySelectedProblem, this.currentLevel, this.spawnCount));
     }
 
-    public void OnIncorrectNumberHit(int numHit)
+    public void OnIncorrectNumberHit()
     {
-        this.messageHolderText.text = "You failed!";
+        this.messageHolderText.text = "WRONG!";
 
-        if (numHit == -1)
-        {
-            this.StartNewGame();
-        }
-        //this.StartNewGame();
+        this.isAGameRunning = false;
+        this.OnClickButtonMenu();
     }
 
     private void SpawnNewQuestion(QuestionData qData)
@@ -144,19 +156,20 @@ public class FallMain : MonoBehaviour
         newObject.SetActive(true);
         QuestionComponent qComponent = newObject.GetComponent<QuestionComponent>();
         qComponent.BindQuestionData(qData);
+        qComponent.AddListenerToCorrectHit(this.OnCorrectNumberHit);
+        qComponent.AddListenerToIncorrectHit(this.OnIncorrectNumberHit);
 
         this.currentlyActiveQuestObject = qComponent;
     }
 
-    //------------------------
 
     public void OnClickButtonMenu()
     {
         this.PauseGame();
 
-        if (!this.isGameRunning)
+        if (!this.isAGameRunning)
         {
-            this.startGameButtonText.text = "Start";
+            this.startGameButtonText.text = "Start new";
         }
         else
         {
@@ -168,14 +181,15 @@ public class FallMain : MonoBehaviour
 
     public void OnClickButtonStartGame()
     {
-        this.ResumeGame();
-
-        this.isGameRunning = true;
         this.menu.SetActive(false);
 
-        if (this.startGameButtonText.text == "Start")
+        if (!this.isAGameRunning)
         {
             this.StartNewGame();
+        }
+        else
+        {
+            this.ResumeGame();
         }
     }
 
@@ -187,20 +201,26 @@ public class FallMain : MonoBehaviour
             this.currentlyActiveQuestObject = null;
         }
 
-        if (this.currentlyFiredWeapon != null)
+        if (this.currentlyUsedBullet != null)
         {
-            Destroy(this.currentlyFiredWeapon.gameObject);
-            this.currentlyFiredWeapon = null;
+            Destroy(this.currentlyUsedBullet.gameObject);
+            this.currentlyUsedBullet = null;
             this.weaponController.loadedBullet = null;
         }
 
         this.weaponController.Resume();
-        this.currentlyFiredWeapon = this.weaponController.LoadNewBullet().GetComponent<BulletComponent>();
-        this.currentlyFiredWeapon.AddListenerToBullet(OnBulletDeactivation);
+        this.currentlyUsedBullet = this.weaponController.LoadNewBullet().GetComponent<BulletComponent>();
+        this.currentlyUsedBullet.AddListenerToBullet(this.OnBulletDeactivation);
 
+        this.currentlyUsedBullet = this.weaponController.LoadNewBullet().GetComponent<BulletComponent>();
+        this.currentlyUsedBullet.AddListenerToBullet(this.OnBulletDeactivation);
+
+        this.thisLevelSpawnCountGoal = Player.playerProgressData[this.currentlySelectedProblem].levelsSpawnCount[this.currentLevel];
         this.spawnCount = 1;
+        this.UpdateSpawnCount();
+
         this.SpawnNewQuestion(ProblemManager.GetNewQuestion(this.currentlySelectedProblem, this.currentLevel, this.spawnCount));
-        
+
     }
 
     public void OnClickButtonChangeLevel()
@@ -225,8 +245,8 @@ public class FallMain : MonoBehaviour
 
         this.UpdateInfoPanel();
 
-        this.isGameRunning = false;
-        this.startGameButtonText.text = "Start";
+        this.isAGameRunning = false;
+        this.startGameButtonText.text = "Start new";
 
         //TODO: Destroy objects on screen
 
@@ -253,21 +273,33 @@ public class FallMain : MonoBehaviour
 
     public void OnBulletDeactivation()
     {
-        this.currentlyFiredWeapon = this.weaponController.LoadNewBullet().GetComponent<BulletComponent>();
-        this.currentlyFiredWeapon.AddListenerToBullet(OnBulletDeactivation);
+        this.weaponController.LoadGivenBullet(this.currentlyUsedBullet.gameObject);
     }
 
     private void PauseGame()
     {
-        this.currentlyActiveQuestObject.Pause();
-        this.currentlyFiredWeapon.Pause();
+        if (this.currentlyActiveQuestObject != null)
+        {
+            this.currentlyActiveQuestObject.Pause();
+        }
+
+        if (this.currentlyUsedBullet != null)
+        {
+            this.currentlyUsedBullet.Pause();
+        }
+
         this.weaponController.Pause();
     }
 
     private void ResumeGame()
     {
         this.currentlyActiveQuestObject.Resume();
-        this.currentlyFiredWeapon.Resume();
+        this.currentlyUsedBullet.Resume();
         this.weaponController.Resume();
+    }
+
+    private void UpdateSpawnCount()
+    {
+        this.spawnCountText.text = this.spawnCount + "/" + this.thisLevelSpawnCountGoal;
     }
 }
