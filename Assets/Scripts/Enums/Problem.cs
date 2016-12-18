@@ -1,4 +1,7 @@
-﻿public enum Problem
+﻿using System;
+
+[Serializable]
+public enum Problem
 {
     Addition,
     Subtraction,

@@ -132,7 +132,7 @@ public class FallMain : MonoBehaviour
             {
                 this.levelText.text = this.currentLevel.ToString();
                 Player.playerProgressData[this.currentlySelectedProblem].levels[this.currentLevel] = true;
-                Player.SavePlayerData();
+                Player.Save();
             }
 
             this.spawnCount = 1;
@@ -145,6 +145,7 @@ public class FallMain : MonoBehaviour
     public void OnIncorrectNumberHit()
     {
         this.messageHolderText.text = "WRONG!";
+        Player.Save();
 
         this.isAGameRunning = false;
         this.OnClickButtonMenu();
@@ -245,10 +246,9 @@ public class FallMain : MonoBehaviour
 
         this.UpdateInfoPanel();
 
+        Player.selectedProblem = this.currentlySelectedProblem;
         this.isAGameRunning = false;
         this.startGameButtonText.text = "Start new";
-
-        //TODO: Destroy objects on screen
 
         this.levelChoicePanel.SetActive(false);
         this.actionChoicePanel.SetActive(true);
@@ -268,6 +268,7 @@ public class FallMain : MonoBehaviour
 
     public void OnClickButtonOpenMap()
     {
+        Player.Save();
         GameStateManager.TransitionToScene(GameScene.Map);
     }
 
