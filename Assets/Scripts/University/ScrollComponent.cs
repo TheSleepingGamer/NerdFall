@@ -3,6 +3,8 @@ using UnityEngine.EventSystems;
 
 public class ScrollComponent : MonoBehaviour, IPointerClickHandler
 {
+    private const int IntelliganceBetweenProblems = 100;
+
     public Problem problem;
 
     public GameObject taskInfo;
@@ -31,7 +33,18 @@ public class ScrollComponent : MonoBehaviour, IPointerClickHandler
         }
         else
         {
-            spriteRenderer.sprite = lockedSprite;
+            if (Player.intelligenceAmount >= (int)this.problem * IntelliganceBetweenProblems)
+            {
+                Player.playerProgressData.Add(this.problem, ProblemManager.GenerateNewProblem(this.problem));
+                Player.Save();
+
+                spriteRenderer.sprite = unlockedSprite;
+                this.isUnlocked = true;
+            }
+            else
+            {
+                spriteRenderer.sprite = lockedSprite;
+            }
         }
     }
 
