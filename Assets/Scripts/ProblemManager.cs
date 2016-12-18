@@ -11,15 +11,23 @@ public static class ProblemManager
         switch (wanterProblem)
         {
             case Problem.Addition:
-                return GenerateAdditionData();
+                return GenerateData(Problem.Addition);
             case Problem.Subtraction:
-                return GenerateSubtractionData();
+                return GenerateData(Problem.Subtraction);
+            case Problem.Multiplication:
+                return GenerateData(Problem.Multiplication);
+            case Problem.Division:
+                return GenerateData(Problem.Division);
+            case Problem.Trigonometry:
+                return GenerateData(Problem.Trigonometry);
+            case Problem.Fibonacci:
+                return GenerateData(Problem.Fibonacci);
             default:
                 throw new ArgumentException("Problem cannot be generated.");
         }
     }
 
-    private static ProblemData GenerateAdditionData()
+   /* private static ProblemData GenerateAdditionData()
     {
         ProblemData newData = new ProblemData(Problem.Addition);
         newData.levels.Add(1, true);
@@ -39,7 +47,25 @@ public static class ProblemManager
 
     private static ProblemData GenerateSubtractionData()
     {
-        ProblemData newData = new ProblemData(Problem.Addition);
+        ProblemData newData = new ProblemData(Problem.Subtraction);
+        newData.levels.Add(1, true);
+        for (int i = 2; i <= 50; i++)
+        {
+            newData.levels.Add(i, false);
+        }
+
+        newData.levelsSpawnCount.Add(1, 15);
+        for (int i = 2; i <= 50; i++)
+        {
+            newData.levelsSpawnCount.Add(i, 15);
+        }
+
+        return newData;
+    }*/
+
+    private static ProblemData GenerateData(Problem problem)
+    {
+        ProblemData newData = new ProblemData(problem);
         newData.levels.Add(1, true);
         for (int i = 2; i <= 50; i++)
         {
@@ -63,8 +89,11 @@ public static class ProblemManager
                 return GetNewAddtitionQuestion(level, spawnNumber);
             case Problem.Subtraction:
                 return GetNewSubtractionQuestion(level, spawnNumber);
+
             default:
-                throw new ArgumentException("Problem cannot be generated.");
+                // TODO: Implemente questions for the rest of the problems
+                return GetNewAddtitionQuestion(level, spawnNumber);
+                //throw new ArgumentException("Problem cannot be generated.");
         }
     }
 

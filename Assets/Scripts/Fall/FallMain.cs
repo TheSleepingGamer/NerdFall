@@ -226,6 +226,7 @@ public class FallMain : MonoBehaviour
 
         this.SpawnNewQuestion(ProblemManager.GetNewQuestion(this.currentlySelectedProblem, this.currentLevel, this.spawnCount));
 
+        this.isAGameRunning = true;
     }
 
     public void OnClickButtonChangeLevel()
