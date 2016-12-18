@@ -6,6 +6,8 @@ public class BubbleComponent : MonoBehaviour
 {
     public TextMesh text;
 
+    public AudioSource bubblePop;
+
     private Action<int> bubbleHitAction = null;
 
     public void SetNumber(int x)
@@ -19,6 +21,8 @@ public class BubbleComponent : MonoBehaviour
         {
             if (this.bubbleHitAction != null)
             {
+                bubblePop.Play();
+
                 col.gameObject.GetComponent<BulletComponent>().InformBulletIsNotWorkingAnymore();
 
                 this.bubbleHitAction.Invoke(int.Parse(this.text.text));

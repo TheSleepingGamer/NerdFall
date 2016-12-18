@@ -37,6 +37,8 @@ public class FallMain : MonoBehaviour
     public GameObject spawnPosition;
     public GameObject questionObjectPrefab;
 
+    public AudioSource backgroundMusic;
+
     private bool isAGameRunning;
 
     private Problem currentlySelectedProblem;
@@ -167,6 +169,7 @@ public class FallMain : MonoBehaviour
     public void OnClickButtonMenu()
     {
         this.PauseGame();
+        this.backgroundMusic.Pause();
 
         if (!this.isAGameRunning)
         {
@@ -183,6 +186,7 @@ public class FallMain : MonoBehaviour
     public void OnClickButtonStartGame()
     {
         this.menu.SetActive(false);
+        this.backgroundMusic.Play();
 
         if (!this.isAGameRunning)
         {
