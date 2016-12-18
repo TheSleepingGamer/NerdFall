@@ -3,9 +3,7 @@ using UnityEngine.EventSystems;
 
 public class ScrollComponent : MonoBehaviour, IPointerClickHandler
 {
-    public string name;
-
-    public string description;
+    public Problem problem;
 
     public GameObject taskInfo;
 
@@ -25,73 +23,15 @@ public class ScrollComponent : MonoBehaviour, IPointerClickHandler
         mapButton.SetActive(true);
         spriteRenderer = GetComponent<SpriteRenderer>();
         this.isUnlocked = false;
-        switch (name)
+
+        if(Player.playerProgressData.ContainsKey(this.problem))
         {
-            case "addition":
-                this.description = "In this level you'll master your skill to solve simple arithmethic addition.";
-                spriteRenderer.sprite = unlockedSprite;
-                this.isUnlocked = true;
-                break;
-            case "subtraction":
-                if (Player.intelligenceAmount > 200)
-                {
-                    this.description = "In this level you'll master your skill to solve simple arithmethic subtraction.";
-                    spriteRenderer.sprite = unlockedSprite;
-                    this.isUnlocked = true;
-                }
-                else
-                {
-                    spriteRenderer.sprite = lockedSprite;
-                }
-
-                break;
-            case "multiplication":
-                if (Player.intelligenceAmount > 250)
-                {
-                    spriteRenderer.sprite = unlockedSprite;
-                    this.isUnlocked = true;
-                }
-                else
-                {
-                    spriteRenderer.sprite = lockedSprite;
-                }
-
-                break;
-            case "division":
-                if (Player.intelligenceAmount > 350)
-                {
-                    spriteRenderer.sprite = unlockedSprite;
-                    this.isUnlocked = true;
-                }
-                else
-                {
-                    spriteRenderer.sprite = lockedSprite;
-                }
-
-                break;
-            case "fibonacci":
-                if (Player.intelligenceAmount > 450)
-                {
-                    spriteRenderer.sprite = unlockedSprite;
-                    this.isUnlocked = true;
-                }
-                else
-                {
-                    spriteRenderer.sprite = lockedSprite;
-                }
-
-                break;
-            case "trigonometry":
-                if (Player.intelligenceAmount >= 600)
-                {
-                    spriteRenderer.sprite = unlockedSprite;
-                    this.isUnlocked = true;
-                }
-                else
-                {
-                    spriteRenderer.sprite = lockedSprite;
-                }
-                break;
+            spriteRenderer.sprite = unlockedSprite;
+            this.isUnlocked = true;
+        }
+        else
+        {
+            spriteRenderer.sprite = lockedSprite;
         }
     }
 
@@ -101,7 +41,5 @@ public class ScrollComponent : MonoBehaviour, IPointerClickHandler
         {
             taskInfo.SetActive(true);
         }
-
-       // mapButton.SetActive(true);
     }
 }
