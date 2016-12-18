@@ -39,6 +39,7 @@ public class ScrollComponent : MonoBehaviour, IPointerClickHandler
     {
         if (this.isUnlocked)
         {
+            Player.selectedProblem = this.problem;
             taskInfo.SetActive(true);
         }
     }

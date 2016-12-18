@@ -51,7 +51,7 @@ public class FallMain : MonoBehaviour
     {
         this.isAGameRunning = false;
 
-        this.currentlySelectedProblem = Problem.Addition;
+        this.currentlySelectedProblem = Player.selectedProblem;
         this.currentLevel = 1;
 
         // Mocking player data

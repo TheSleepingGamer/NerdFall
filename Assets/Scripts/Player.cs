@@ -12,6 +12,8 @@ public static class Player
     public static int intelligenceAmount;
     public static Dictionary<Problem, ProblemData> playerProgressData;
 
+    public static Problem selectedProblem = Problem.Addition;
+
     public static void SavePlayerData()
     {
         

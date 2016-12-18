@@ -18,6 +18,8 @@ public class HomeScript : MonoBehaviour
 
     public Text fibonacciText;
 
+    public Text intellectPoints;
+
     void Start()
     {
         maxValueInCollection(Problem.Addition, this.additionText);
@@ -29,6 +31,8 @@ public class HomeScript : MonoBehaviour
         maxValueInCollection(Problem.Trigonometry, this.trigonometryText);
 
         maxValueInCollection(Problem.Fibonacci, this.fibonacciText);
+
+        intellectPoints.text = "Intellect: " + Player.intelligenceAmount.ToString();
     }
 
     private void maxValueInCollection(Problem ProblemType, Text textToChange)
